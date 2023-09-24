@@ -9,11 +9,17 @@ class Sudoku {
 public:
 	int grid[9][9]; // 스도쿠 판을 표현할 2차원 배열, 크기는 항상 9x9
 	int K; // 빈칸으로 남길 숫자의 개수
+	int N;
 
 	// 생성자: K(빈칸 개수)만 입력으로 받음
-	Sudoku(int K) {
+	Sudoku(int K):N(9) {
 		this->K = K;
-
+		// 명시적으로 grid를 0으로 초기화
+		for(int i=0; i<9; i++){
+			for(int j=0; j<9; j++){
+				grid[i][j]=0;
+			}
+		}
 	}
 
 	// 스도쿠 판을 채우는 주 함수
@@ -28,7 +34,7 @@ public:
 
 	// 대각선의 작은 정사각형을 채우는 함수
 	void fillDiagonal() {
-		for (int i = 0; i < N; i = i + 3)
+		for (int i = 0; i < 9; i = i + 3)
 			fillBox(i, i);
 	}
 
@@ -57,7 +63,7 @@ public:
 
 	// 1부터 num까지의 랜덤한 숫자를 생성하는 함수
 	int randomGenerator(int num) {
-		return (int)floor((float)(rand() / double(RAND_MAX) * num + 1));
+		return (rand() % num)+1;
 	}
 
 	// (i, j) 위치에 num을 놓을 수 있는지 판단하는 함수
@@ -85,7 +91,7 @@ public:
 	// 스도쿠 판을 채우는 재귀 함수
 	bool fillRemaining(int i, int j) {
 		// i와 j 값이 9 이상이면, 모든 칸을 채운 것이므로 true를 반환
-		if (i == 9 - 1 && j == 9)
+		if (i == 8 && j == 9)
 			return true;
 
 		// j가 9 이상이면, 다음 행으로 이동
@@ -121,8 +127,8 @@ public:
 			int cellId = randomGenerator(9 * 9) - 1;  // 랜덤한 위치의 cell 인덱스 생성
 			int i = (cellId / 9);  // 행 인덱스 계산
 			int j = cellId % 9;  // 열 인덱스 계산
-			if (j != 0)
-				j--;
+			// if (j != 0)
+			// 	j--;
 
 			if (grid[i][j] != 0) {  // 해당 cell이 0이 아니면 (즉, 지울 수 있으면)
 				count--;  // 카운트 감소
@@ -147,10 +153,11 @@ public:
 };
 
 int main() {
-	int K = 60;  // 60개의 빈 칸
+	int K = 50;  // 50개의 빈 칸
     srand(time(0));  // 현재 시간을 시드 값으로 설정
-	Sudoku sudoku(9, K);  // 스도쿠 객체 생성
-	sudoku.fillValues();  // 스도쿠 판 채우기
-	sudoku.printSudoku();  // 스도쿠 판 출력
+	Sudoku Sudoku(K);  // 스도쿠 객체 생성
+	Sudoku.fillValues();  // 스도쿠 판 채우기
+	Sudoku.printSudoku();  // 스도쿠 판 출력
 	return 0;
 }
+
